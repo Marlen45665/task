@@ -41,18 +41,13 @@ const SignUp = () => {
                 console.log(res)
                 if(res.error){
                     redirect("/")
-                    toast('ой ой кажется что-то пошло не так', {duration: 2000});
+                    toast('Упс кажется что-то пошло не так, проверьте данные для входа', {duration: 2000});
                 } else {
                     sessionStorage.setItem('name', res.username);
                     sessionStorage.setItem('token', res.token)
-                    // document.cookie = res.token
                     redirect("/main")
                 }
             })
-            .catch(e => {
-                // console.log(e)
-            })
-            
     }
     const { register, watch, handleSubmit} = useForm()
     const redirect = useNavigate()

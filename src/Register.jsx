@@ -164,11 +164,25 @@ function Register() {
             .then(response => response.json())
             .then(res => setTasks(res));
     }
-    // const a = () => {
-    //     const filteredTasks = tasks.filter(i => i.fields.ended && i.fields.started);
-    //     const s = filteredTasks.map(i => time(formatData(i.fields.datestart), formatData(i.fields.dateend)));
-    //     // console.log(sumTimes(s))
-    // }
+
+    const [timeText, setTimeText] = useState("")
+    useEffect(() => {
+        function sumTimes(times) {
+            let totalMinutes = 0;
+            for (let time of times) {
+                const match = time.match(/^(\d+)\s*м$/);
+                if (match) {
+                    totalMinutes += parseInt(match[1]);
+                }
+            }
+            return totalMinutes + 'м';
+        }
+       
+        const filteredTasks = tasks.filter(i => i.fields.ended && i.fields.started);
+        const s = filteredTasks.map(i => time(formatData(i.fields.datestart), formatData(i.fields.dateend)));
+        setTimeText(sumTimes(s))
+    }, [tasks])
+    
     
     return (
         <>
@@ -270,7 +284,7 @@ function Register() {
                                 )}  
                             </Popup>
                         </div>
-                        <CurTime>0 ч 0 м</CurTime>
+                        <CurTime style={{fontSize: "20px"}}>{timeText}</CurTime>
                     </div>
                     <div style={{display: "flex", alignItems: "center", justifyContent: "center", width:"100%", height: "1px", backgroundColor: "rgba(255, 255, 255, 0.2)" }}></div>
                     {tasks && Array.isArray(tasks) && tasks.map(task => {
@@ -311,13 +325,13 @@ function Register() {
                     })}
                 </div>  
                 <Footer>
-                    <LinkBlock>
+                    <LinkBlock onClick={() => toast("Больше ничего нет")}>
                         <InputIcon src={check}></InputIcon>
-                        <TextLink>Rodion</TextLink>
+                        <TextLink>Загрузить ещё</TextLink>
                     </LinkBlock>
                     <LinkBlock>
                         <InputIcon src={align}></InputIcon>
-                        <TextLink>Rodion</TextLink>
+                        <TextLink>Только сегодня</TextLink>
                     </LinkBlock>
                     <Popup
                         trigger={
