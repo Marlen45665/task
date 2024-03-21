@@ -60,12 +60,13 @@ function ference(startTime) {
 }
 
 function Register() {
+    const token = sessionStorage.getItem('token')
     const [tasks, setTasks] = useState([]);
     const [active, setActive] = useState(false)
     const { register, handleSubmit, reset, setValue } = useForm();
 
     useEffect(() => {
-        fetch(`https://ansaratracker.ru/newapi/Task?token=${document.cookie}`)
+        fetch(`https://ansaratracker.ru/newapi/Task?token=${token}`)
             .then(response => response.json())
             .then(res => setTasks(res));
     }, []);
@@ -81,12 +82,12 @@ function Register() {
                 'Content-Type': 'application/json;charset=utf-8'
             },
             body: JSON.stringify({
-                "token": document.cookie,
+                "token": token,
                 "task": data.newTask,
                 "started": false
             })
         })
-        await fetch(`https://ansaratracker.ru/newapi/Task?token=${document.cookie}`)
+        await fetch(`https://ansaratracker.ru/newapi/Task?token=${token}`)
             .then(response => response.json())
             .then(res => setTasks(res));
     };
@@ -96,7 +97,7 @@ function Register() {
             return
         }
         if(active){
-            toast('Сначала завершите текущую задачу', {duration: 2000});
+            toast('Сначала завершите текущую задачу', {duration: 1000});
             return
         } 
         setActive(true)
@@ -107,13 +108,13 @@ function Register() {
                 'Content-Type': 'application/json;charset=utf-8'
             },
             body: JSON.stringify({
-                "token": document.cookie,
+                "token": token,
                 "task": data.newTask,
                 "started": true
             })
         })
 
-        await fetch(`https://ansaratracker.ru/newapi/Task?token=${document.cookie}`)
+        await fetch(`https://ansaratracker.ru/newapi/Task?token=${token}`)
             .then(response => response.json())
             .then(res => {
                 setTasks(res)
@@ -122,13 +123,13 @@ function Register() {
 
     async function startTask(id) {
         if(active){
-            toast('Сначала завершите текущую задачу',  {duration: 2000});
+            toast('Сначала завершите текущую задачу',  {duration: 1000});
             return
         } 
         setActive(true)
-        await fetch(`https://ansaratracker.ru/newapi/startTask?token=${document.cookie}&id=${id}`)
+        await fetch(`https://ansaratracker.ru/newapi/startTask?token=${token}&id=${id}`)
 
-        await fetch(`https://ansaratracker.ru/newapi/Task?token=${document.cookie}`)
+        await fetch(`https://ansaratracker.ru/newapi/Task?token=${token}`)
             .then(response => response.json())
             .then(res => {
                 setTasks(res)
@@ -141,9 +142,9 @@ function Register() {
             return
         }
         setActive(false)
-        await fetch(`https://ansaratracker.ru/newapi/stopTask?token=${document.cookie}&id=${id}`)
+        await fetch(`https://ansaratracker.ru/newapi/stopTask?token=${token}&id=${id}`)
 
-        await fetch(`https://ansaratracker.ru/newapi/Task?token=${document.cookie}`)
+        await fetch(`https://ansaratracker.ru/newapi/Task?token=${token}`)
             .then(response => response.json())
             .then(res => setTasks(res));
     }
@@ -155,14 +156,20 @@ function Register() {
                 'Content-Type': 'application/json;charset=utf-8'
             },
             body: JSON.stringify({
-                "token": document.cookie,
+                "token": token,
                 "id": id
             })
         })
-        await fetch(`https://ansaratracker.ru/newapi/Task?token=${document.cookie}`)
+        await fetch(`https://ansaratracker.ru/newapi/Task?token=${token}`)
             .then(response => response.json())
             .then(res => setTasks(res));
     }
+    // const a = () => {
+    //     const filteredTasks = tasks.filter(i => i.fields.ended && i.fields.started);
+    //     const s = filteredTasks.map(i => time(formatData(i.fields.datestart), formatData(i.fields.dateend)));
+    //     // console.log(sumTimes(s))
+    // }
+    
     return (
         <>
             <div style={{maxWidth: "1000px", margin: "0 auto", marginTop:"40px"}}>
@@ -316,7 +323,7 @@ function Register() {
                         trigger={
                             <LinkBlock>
                                 <InputIcon src={user}></InputIcon>
-                                <TextLink>Rodion</TextLink>
+                                <TextLink>{sessionStorage.getItem('name')}</TextLink>
                             </LinkBlock>
                         }
                         modal
@@ -354,6 +361,7 @@ export default Register;
 
 
 const List = styled.div`
+    font-size: 16px;
     height: 60px;
     width: 100%;
     display: flex;

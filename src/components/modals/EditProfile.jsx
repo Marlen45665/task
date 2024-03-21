@@ -2,6 +2,7 @@ import styled from "styled-components";
 import InputComponent from "../input/InputComponent";
 import { Group } from "../style";
 import ButtonComponent from "../button/ButtonComponent";
+import { useNavigate } from "react-router";
 
 const Slice = styled.div`
     width: 100%;
@@ -11,7 +12,7 @@ const Slice = styled.div`
     gap: ${({gap}) => gap}px;
 `
 const EditProfile = ({status}) => {
-    
+    const redirect = useNavigate()
     return(
         <>
         <Group gap={26}>
@@ -19,7 +20,10 @@ const EditProfile = ({status}) => {
             <InputComponent></InputComponent>
             <Slice gap={20}>
                 <ButtonComponent type={"save"}></ButtonComponent>
-                <ButtonComponent type={"logout"}></ButtonComponent>
+                <div onClick={() => redirect("/")}>
+                    <ButtonComponent type={"logout"}></ButtonComponent>
+                </div>
+                
             </Slice>
             
         </Group>

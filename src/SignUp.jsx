@@ -5,6 +5,7 @@ import { redirect } from "react-router-dom";
 import { InputBox } from "./components/input/InputComponent";
 import { Input } from "./components/input/InputComponent";
 import { useNavigate } from "react-router-dom";
+import toast, { Toaster } from 'react-hot-toast';
 
 const RegisterBox = styled.div`
     width: 280px;
@@ -22,9 +23,15 @@ const ButtonRegister = styled.div`
     align-items: center;
     justify-content: center;
     width: 100%;
+    &:hover{
+        cursor: pointer;
+        background-color: rgba(255, 255, 255, 0.8);
+    }
 `
 
 const SignUp = () => {
+    sessionStorage.removeItem('name')
+    sessionStorage.removeItem('token')
     async function handleForm() {
         await fetch(`https://ansaratracker.ru/newapi/signup?username=${watch().name}&password=${watch().password}`)
             .then(response => response.json())
@@ -32,15 +39,22 @@ const SignUp = () => {
             .then(response => response.json())
             .then(res => {
                 console.log(res)
-                document.cookie = res.token
+                if(res.error){
+                    redirect("/")
+                    toast('ой ой кажется что-то пошло не так', {duration: 2000});
+                } else {
+                    sessionStorage.setItem('name', res.username);
+                    sessionStorage.setItem('token', res.token)
+                    // document.cookie = res.token
+                    redirect("/main")
+                }
             })
             .catch(e => {
-                return
+                // console.log(e)
             })
-            redirect("/main")
+            
     }
     const { register, watch, handleSubmit} = useForm()
-    console.log(watch())
     const redirect = useNavigate()
     return(
         <div style={{display: "flex", alignItems: "center", justifyContent: "center", width: "100vw", height: "100vh"}}>
@@ -55,6 +69,15 @@ const SignUp = () => {
                     <ButtonRegister onClick={() => handleForm()}>Войти</ButtonRegister>
                 </Group>
             </RegisterBox>
+            <Toaster 
+                toastOptions={{
+                    style: {
+                        padding: '30px',
+                        color: "#fff",
+                        backgroundColor: '#161616',
+                    },
+                }}
+            />
         </div>
     )
 }
