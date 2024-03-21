@@ -14,28 +14,10 @@ import AddTaskModal from './components/modals/AddTaskModal';
 import toast, { Toaster } from 'react-hot-toast';
 import { ModalBox, ModalTitleBox, ModalTitle, ModalClosed } from './components/modals/Modal';
 import closed from "./assets/close.svg"
-
-
-const List = styled.div`
-    height: 60px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    color: #fff;
-    &:hover{
-        background-color: rgba(255, 255, 255, 0.08);
-    }
-`
-const Title = styled.div`
-    color: #fff;
-    font-size: 20px;
-`
-const CurTime = styled.div`
-    font-size: 16px;
-    color: #547CFB;
-`
+import user from "./assets/user.svg";
+import align from "./assets/align.svg";
+import check from "./assets/check.svg";
+import EditProfile from './components/modals/EditProfile';
 
 const formatData = (timestamp) =>{
     if(timestamp == ""){
@@ -199,7 +181,8 @@ function Register() {
                             onClick={handleSubmit(autoAddTask)}
                         ></InputIcon>
                     </div>
-                    {tasks && tasks.map(task => {
+                    <div style={{display: "flex", alignItems: "center", justifyContent: "center", width:"100%", height: "1px", backgroundColor: "rgba(255, 255, 255, 0.2)" }}></div>
+                    {tasks && Array.isArray(tasks) && tasks.map(task => {
                         if(task.fields.ended && task.fields.started){
                             return
                         } else {
@@ -255,7 +238,7 @@ function Register() {
                 </div>
                 <div style={{width: "100%"}}>
                     <div style={{width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "10px"}}>
-                        <div style={{display: "flex", alignItems: "center", justifyContent: "center", gap: "10px"}}>
+                        <div style={{display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", marginBottom: "16px"}}>
                             <Title>Сегодня</Title>
                             <Popup
                                 trigger={
@@ -282,7 +265,8 @@ function Register() {
                         </div>
                         <CurTime>0 ч 0 м</CurTime>
                     </div>
-                    {tasks.map(task => {
+                    <div style={{display: "flex", alignItems: "center", justifyContent: "center", width:"100%", height: "1px", backgroundColor: "rgba(255, 255, 255, 0.2)" }}></div>
+                    {tasks && Array.isArray(tasks) && tasks.map(task => {
                         if(task.fields.ended && task.fields.started ){
                             return(
                             <Popup
@@ -319,6 +303,38 @@ function Register() {
                         } 
                     })}
                 </div>  
+                <Footer>
+                    <LinkBlock>
+                        <InputIcon src={check}></InputIcon>
+                        <TextLink>Rodion</TextLink>
+                    </LinkBlock>
+                    <LinkBlock>
+                        <InputIcon src={align}></InputIcon>
+                        <TextLink>Rodion</TextLink>
+                    </LinkBlock>
+                    <Popup
+                        trigger={
+                            <LinkBlock>
+                                <InputIcon src={user}></InputIcon>
+                                <TextLink>Rodion</TextLink>
+                            </LinkBlock>
+                        }
+                        modal
+                        nested
+                    >
+                        {close => (
+                            <ModalBox>
+                                <ModalTitleBox>
+                                    <ModalTitle>Редактирование профиля</ModalTitle>
+                                    <div onClick={close}>
+                                        <ModalClosed src={closed}></ModalClosed>  
+                                    </div>
+                                </ModalTitleBox>
+                                <EditProfile></EditProfile>
+                            </ModalBox> 
+                        )}  
+                    </Popup>
+                </Footer>
                 </Group> 
                 <Toaster 
                     toastOptions={{
@@ -329,9 +345,50 @@ function Register() {
                         },
                     }}
                 />
+               
             </div>
-            
         </>
     );
 }
 export default Register;
+
+
+const List = styled.div`
+    height: 60px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    &:hover{
+        background-color: rgba(255, 255, 255, 0.08);
+    }
+`
+const Title = styled.div`
+    color: #fff;
+    font-size: 20px;
+`
+const CurTime = styled.div`
+    font-size: 16px;
+    color: #547CFB;
+`
+const Footer = styled.div`
+    width: 100%;
+    display: flex;
+    gap: 28px;
+    color: #7A7A7A;
+`
+const LinkBlock = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    &:hover{
+        cursor: pointer;
+        color: #fff;
+    }
+`
+const TextLink = styled.div`
+    font-size: 14px;
+`

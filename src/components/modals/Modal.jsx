@@ -2,7 +2,10 @@ import styled from "styled-components"
 import close from "../../assets/close.svg"
 
 export const ModalBox = styled.div`
-z-index: 10000;
+
+    min-width: 100%;
+    max-width: 340px;
+    z-index: 10000;
     border-radius: 8px;
     background-color: #161616;
     padding: 30px;

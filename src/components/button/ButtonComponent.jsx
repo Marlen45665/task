@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import save from "../../assets/save.svg"
+import trash from "../../assets/trash.svg"
+import log from "../../assets/log.svg"
 
 const ButtonBox = styled.div`
     width: 100%;
@@ -34,7 +36,7 @@ const ButtonBox = styled.div`
                 `;
             case 'logout':
                 return `
-                border: 2px solid #7A7A7A; 
+                border: 1px solid #7A7A7A; 
                     background-color: none;
                     color: #7A7A7A;
                     &:hover{
@@ -73,12 +75,23 @@ const text = (type) => {
             return ''; 
     }
 }
+const imageIcon = (type) => {
+    switch (type) {
+        case 'save':
+            return save;
+        case 'delete':
+            return trash;
+        case 'logout':
+            return log;
+        default:
+            return ''; 
+    }
+}
 
-
-const ButtonComponent = ({type, icon}) => {
+const ButtonComponent = ({type}) => {
     return (
         <ButtonBox type={type} >
-            <ButtonIcon src={save} /> 
+            <ButtonIcon src={imageIcon(type)} /> 
             <ButtonText>{text(type)}</ButtonText>
         </ButtonBox>
     );
